@@ -1,0 +1,18 @@
+body {
+  padding: 50px;
+  color: whitesmoke;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: black;
+
+  background: url('/images/money.jpg') no-repeat fixed;
+  background-size: cover;
+
+}
+
+a {
+  color: lightblue;
+}
+
+img.about {
+  max-width: 100%;
+}
