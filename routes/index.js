@@ -11,19 +11,24 @@ router.get('/', function(req, res, next) {
 router.get('/convert', function(req, res, next){
   var query = req.query; // get the URL query string as an object
 
-//      todo figure out how many dollars to convert
-    var dollars = req.query.dollars;
-//      todo figure out the currency to convert to
+    // convert from
+    var fromCurrency = req.query.from_currency;
+    // money amount. parseFloat to convert str into float
+    var money = parseFloat(req.query.money);
+    // convert to
     var toCurrency = req.query.to_currency;
-//
-//      todo figure out the exchange rate
-    var converted = dollars * exchangeRates[toCurrency];
-  // console.log(exchangeRates);
-//
-//      todo replace this with a response page with the conversion data
-//     res.send(dollars + ' in ' + toCurrency + ' is ' + converted); // we have to send something in response
+
+    // exchange calculation
+    var converted = (exchangeRates[toCurrency] / exchangeRates[fromCurrency]  * money);
+
+    // limit the money and the converted calculation to 2 decimal places
+    money = money.toFixed(2);
+    converted = converted.toFixed(2);
+
+    // results
     res.render('results', {
-      dollars: dollars,
+      fromCurrency: fromCurrency,
+      money: money,
       toCurrency: toCurrency,
       converted: converted}
     );
@@ -31,6 +36,6 @@ router.get('/convert', function(req, res, next){
 
 // GET about page
 router.get('/about', function(req, res, next){
-  res.render('about', { name: "My awesome site"});
+  res.render('about', { name: "Scott Kim", description: "A simple convertion website that converts USD to EURO or YEN"});
 });
 module.exports = router;
