@@ -36,6 +36,6 @@ router.get('/convert', function(req, res, next){
 
 // GET about page
 router.get('/about', function(req, res, next){
-  res.render('about', { name: "Scott Kim", description: "A simple convertion website that converts USD to EURO or YEN"});
+  res.render('about', { name: "Scott Kim", description: "A simple convertion website that converts from and to USD, EURO or YEN"});
 });
 module.exports = router;
