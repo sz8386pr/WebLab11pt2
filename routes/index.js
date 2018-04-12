@@ -18,24 +18,39 @@ router.get('/convert', function(req, res, next){
     // convert to
     var toCurrency = req.query.to_currency;
 
-    // exchange calculation
-    var converted = (exchangeRates[toCurrency] / exchangeRates[fromCurrency]  * money);
+    // var converted = (exchangeRates[toCurrency] / exchangeRates[fromCurrency]  * money);
+    exchangeRates(function(error, data){
 
-    // limit the money and the converted calculation to 2 decimal places
-    money = money.toFixed(2);
-    converted = converted.toFixed(2);
+        // if there is an error, render the error page
+        if (error) {
+            return res.render('error', {error: error.message})
+        }
 
-    // results
-    res.render('results', {
-      fromCurrency: fromCurrency,
-      money: money,
-      toCurrency: toCurrency,
-      converted: converted}
-    );
+        // if user entered toCurrency the same as fromCurrency, set rate to 1
+        if (toCurrency === fromCurrency){
+            var rate = 1;
+        }
+        // Otherwise get the rates
+        else {
+            rate = data['rates'][toCurrency];
+        }
+
+        // exchange calculation
+        var converted = money * rate;
+
+        // If no error, render the results
+        return res.render('results', {
+            fromCurrency: fromCurrency,
+            money: money,
+            toCurrency: toCurrency,
+            converted: converted}
+        );
+    }, fromCurrency, toCurrency)
 });
 
 // GET about page
 router.get('/about', function(req, res, next){
   res.render('about', { name: "Scott Kim", description: "A simple convertion website that converts from and to USD, EURO or YEN"});
 });
+
 module.exports = router;
